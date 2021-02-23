@@ -50,19 +50,26 @@ class SpotifyController extends Controller
             $user = UserRepository::findBySpotifyLogin($spotifyUser->id);
 
             if (!$user) {
-                Log::info("Inserting new user {$spotifyUser->id}");
+                Log::info("Creating new user '{$spotifyUser->id}'");
 
                 $user = UserRepository::insert(
                     $spotifyUser->display_name, 
                     $spotifyUser->id, 
                     $spotifyUser->email, 
-                    $spotifyUser->country,
-                    $session->getRefreshToken(),
-                    empty($spotifyUser->images) ? '' : $spotifyUser->images[0]->url
+                    $spotifyUser->country
                 );
-            } else {
-                SpotifyUser::where('user_id', $user->id)->update(['refresh_token' => $session->getRefreshToken()]);
             }
+
+            Log::info("Updating user '{$spotifyUser->id}' information");
+            UserRepository::update(
+                $user->id,
+                $spotifyUser->display_name, 
+                $spotifyUser->id, 
+                $spotifyUser->email, 
+                $spotifyUser->country,
+                $session->getRefreshToken(),
+                empty($spotifyUser->images) ? '' : $spotifyUser->images[0]->url
+            );
 
             Auth::login($user, true);    
             return redirect('home');

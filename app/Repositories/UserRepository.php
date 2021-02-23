@@ -25,9 +25,7 @@ final class UserRepository
         string $name, 
         string $login, 
         string $email, 
-        string $country,
-        string $refreshToken,
-        string $profilePicture
+        string $country
     ) {
         $user = User::create([
             'name' => $name,
@@ -38,6 +36,39 @@ final class UserRepository
 
         SpotifyUser::create([
             'user_id' => $user->id,
+            'login' => $login,
+            'country' => $country
+        ]);
+
+        return $user;
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param integer $id
+     * @param string $name
+     * @param string $login
+     * @param string $email
+     * @param string $country
+     * @param string $profilePicture
+     * @return void
+     */
+    public static function update(
+        int $id,
+        string $name, 
+        string $login, 
+        string $email, 
+        string $country,
+        string $refreshToken,
+        string $profilePicture
+    ) {
+        $user = User::find($id)->update([
+            'name' => $name,
+            'email' => $email,
+        ]);
+
+        SpotifyUser::whereUserId($id)->update([
             'login' => $login,
             'country' => $country,
             'refresh_token' => $refreshToken,

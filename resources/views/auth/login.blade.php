@@ -48,6 +48,8 @@
                                         <a href="{{ route('spotify.login') }}" class="btn btn-spotify btn-user btn-block">
                                             <i class="fab fa-spotify fa-fw"></i> Login with Spotify
                                         </a>
+
+                                        @csrf
                                     </form>
                                     <hr>
                                     <div class="text-center">

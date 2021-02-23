@@ -41,7 +41,7 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function spotifyUser()
+    public function spotify()
     {
         return $this->hasOne(SpotifyUser::class);
     }

@@ -18,8 +18,8 @@ class CreateSpotifyUsersTable extends Migration
             $table->bigInteger('user_id')->index();
             $table->string('login');
             $table->string('country');
-            $table->string('refresh_token');
-            $table->string('profile_picture');
+            $table->string('refresh_token')->nullable();
+            $table->string('profile_picture')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

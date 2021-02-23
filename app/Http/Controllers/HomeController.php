@@ -38,31 +38,31 @@ class HomeController extends Controller
      */
     public function dashboard()
     {
+        return view('dashboard');
+
         $session = new SpotifySession(
             env('SPOTIFY_ID'), 
             env('SPOTIFY_SECRET'), 
             route('spotify.callback')
         );
-
-        dump(Auth::user()->spotifyUser->refresh_token);
         
-        $session->refreshAccessToken(Auth::user()->spotifyUser->refresh_token);
-        $accessToken = $session->getAccessToken();    
-        
+        $session->refreshAccessToken(Auth::user()->spotify->refresh_token);
+        $accessToken = $session->getAccessToken();   
+       
         $api = new SpotifyWebAPI();
-        $api->setAccessToken($accessToken);       
-
-        dump($api->me());
+        $api->setAccessToken($accessToken);
         
-        $refreshToken = $session->getRefreshToken();
-        if ($refreshToken !== Auth::user()->spotifyUser->refresh_token) {
-            Auth::user()->spotifyUser->refresh_token = $refreshToken;
-            Auth::user()->spotifyUser->save();    
+        dump(Auth::user());
+        dump($api->me());
+        dump($api->getMyCurrentTrack());
 
-            $login = Auth::user()->spotifyUser->login;
+        $refreshToken = $session->getRefreshToken();
+        if ($refreshToken !== Auth::user()->spotify->refresh_token) {
+            Auth::user()->spotify->refresh_token = $refreshToken;
+            Auth::user()->spotify->save();    
+
+            $login = Auth::user()->spotify->login;
             Log::info("Updated '{$login}' refresh token");
         }
-
-        dd($refreshToken);
     }
 }
