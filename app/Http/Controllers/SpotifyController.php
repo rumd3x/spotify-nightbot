@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Repositories\UserRepository;
+use App\SpotifyUser;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use SpotifyWebAPI\Session as SpotifySession;
 use SpotifyWebAPI\SpotifyWebAPI;
 
@@ -43,16 +46,29 @@ class SpotifyController extends Controller
     
             $session->requestAccessToken($request->get('code'));
             $api->setAccessToken($session->getAccessToken());
+            $spotifyUser = $api->me();
+            $user = UserRepository::findBySpotifyLogin($spotifyUser->id);
 
-            $user = $api->me();
+            if (!$user) {
+                Log::info("Inserting new user {$spotifyUser->id}");
 
-            var_dump($user);
+                $user = UserRepository::insert(
+                    $spotifyUser->display_name, 
+                    $spotifyUser->id, 
+                    $spotifyUser->email, 
+                    $spotifyUser->country,
+                    $session->getRefreshToken(),
+                    empty($spotifyUser->images) ? '' : $spotifyUser->images[0]->url
+                );
+            } else {
+                SpotifyUser::where('user_id', $user->id)->update(['refresh_token' => $session->getRefreshToken()]);
+            }
 
-            UserRepository::insert($user->display_name, $user->id, $user->email, '', $user->country);
-    
-            // return redirect('home');
-        } catch (\Throwable $th) {
+            Auth::login($user, true);    
             return redirect('home');
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return redirect('login');
         }
     }
 

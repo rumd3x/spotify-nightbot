@@ -15,7 +15,13 @@ class CreateSpotifyUsersTable extends Migration
     {
         Schema::create('spotify_users', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->bigInteger('user_id')->index();
+            $table->string('login');
+            $table->string('country');
+            $table->string('refresh_token');
+            $table->string('profile_picture');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

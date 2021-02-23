@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Timestamp;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Repositories\TimestampRepository;
+use Illuminate\Support\Facades\Log;
+use SpotifyWebAPI\Session as SpotifySession;
+use SpotifyWebAPI\SpotifyWebAPI;
 
 class HomeController extends Controller
 {
@@ -38,21 +38,31 @@ class HomeController extends Controller
      */
     public function dashboard()
     {
-        $today = Carbon::now(getenv('TZ') ?: null);
-        $lastEnteredString = 'Never';
-        $lastExitedString = 'Never';
+        $session = new SpotifySession(
+            env('SPOTIFY_ID'), 
+            env('SPOTIFY_SECRET'), 
+            route('spotify.callback')
+        );
 
-        $lastEntered = TimestampRepository::lastByUser(Auth::user(), true);
-        $lastExited = TimestampRepository::lastByUser(Auth::user(), false);
+        dump(Auth::user()->spotifyUser->refresh_token);
+        
+        $session->refreshAccessToken(Auth::user()->spotifyUser->refresh_token);
+        $accessToken = $session->getAccessToken();    
+        
+        $api = new SpotifyWebAPI();
+        $api->setAccessToken($accessToken);       
 
-        if ($lastEntered) {
-            $lastEnteredString = $lastEntered->carbon->calendar();
+        dump($api->me());
+        
+        $refreshToken = $session->getRefreshToken();
+        if ($refreshToken !== Auth::user()->spotifyUser->refresh_token) {
+            Auth::user()->spotifyUser->refresh_token = $refreshToken;
+            Auth::user()->spotifyUser->save();    
+
+            $login = Auth::user()->spotifyUser->login;
+            Log::info("Updated '{$login}' refresh token");
         }
 
-        if ($lastExited) {
-            $lastExitedString = $lastExited->carbon->calendar();
-        }
-
-        return view('home', compact('today', 'lastEnteredString', 'lastExitedString'));
+        dd($refreshToken);
     }
 }

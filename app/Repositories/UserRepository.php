@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\SpotifyUser;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
@@ -10,24 +11,40 @@ use Illuminate\Support\Facades\Hash;
 final class UserRepository
 {
     /**
-     * Inserts a new User
+     * Undocumented function
      *
      * @param string $name
      * @param string $login
      * @param string $email
-     * @param string $password
+     * @param string $country
+     * @param string $refreshToken
+     * @param string $profilePicture
      * @return User
      */
-    public static function insert(string $name, string $login, string $email, string $password, string $country)
-    {
-        return User::create([
+    public static function insert(
+        string $name, 
+        string $login, 
+        string $email, 
+        string $country,
+        string $refreshToken,
+        string $profilePicture
+    ) {
+        $user = User::create([
             'name' => $name,
-            'login' => $login,
             'email' => $email,
-            'country' => $country,
-            'password' => Hash::make($password),
+            'password' => Hash::make(''),
             'email_verified_at' => Carbon::now(),
         ]);
+
+        SpotifyUser::create([
+            'user_id' => $user->id,
+            'login' => $login,
+            'country' => $country,
+            'refresh_token' => $refreshToken,
+            'profile_picture' => $profilePicture,
+        ]);
+
+        return $user;
     }
 
     /**
@@ -36,8 +53,14 @@ final class UserRepository
      * @param integer $id
      * @return User|null
      */
-    public static function findById(int $id)
+    public static function findBySpotifyLogin(string $login)
     {
-        return User::find($id);
+        $spotifyUser = SpotifyUser::whereLogin($login)->first();
+
+        if (!$spotifyUser)  {
+            return null;
+        }
+
+        return $spotifyUser->user;
     }
 }

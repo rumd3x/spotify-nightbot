@@ -18,10 +18,8 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name', 
-        'login',
         'email', 
         'password',
-        'country',
     ];
 
     /**
@@ -43,9 +41,9 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function timestamps()
+    public function spotifyUser()
     {
-        return $this->hasMany(Timestamp::class);
+        return $this->hasOne(SpotifyUser::class);
     }
 
     public function getFirstNameAttribute()
