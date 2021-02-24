@@ -58,7 +58,7 @@
 
             <!-- Nav Item - Charts -->
             <li class="nav-item">
-                <a class="nav-link" href="charts.html">
+                <a class="nav-link" href="{{ route('history') }}">
                     <i class="fas fa-fw fa-music"></i>
                     <span>Song History</span></a>
             </li>

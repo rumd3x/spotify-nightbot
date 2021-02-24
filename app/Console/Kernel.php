@@ -3,6 +3,7 @@
 namespace App\Console;
 
 use App\Jobs\ArtisanCommandJob;
+use App\Jobs\UpdateAllUsersSongsJob;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -25,9 +26,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->job(new ArtisanCommandJob('timestamps:sanitize'))->daily()->onOneServer()->name('timestamp_sanitizer');
-        $schedule->job(new ArtisanCommandJob('timesheet:generate'))->monthlyOn(1, '0:00')->onOneServer()->name('generate_timesheet_real');
-        $schedule->job(new ArtisanCommandJob('timesheet:generate', ['--target' => true]))->monthlyOn(1, '0:00')->onOneServer()->name('generate_timesheet_target_time');
+        $schedule->job(new UpdateAllUsersSongsJob)->everyMinute();
     }
 
     /**

@@ -2,34 +2,32 @@
 
 namespace App\Jobs;
 
-use Rumd3x\IFTTT\Event;
-use Rumd3x\IFTTT\Trigger;
+use App\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Support\Facades\Log;
 
-class IFTTTWebhookJob implements ShouldQueue
+class NightbotSendSongMessage implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     /**
-     * The event to be sent
+     * Undocumented variable
      *
-     * @var Event
+     * @var User
      */
-    private $event;
+    private $user;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct(Event $event)
+    public function __construct(User $user)
     {
-        $this->event = $event;
+        $this->user = $user;
     }
 
     /**
@@ -39,7 +37,6 @@ class IFTTTWebhookJob implements ShouldQueue
      */
     public function handle()
     {
-        $trigger = new Trigger(env('IFTTT_KEY'));
-        $trigger->notify($this->event);
+        //
     }
 }

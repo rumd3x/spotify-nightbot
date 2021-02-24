@@ -35,4 +35,14 @@ class SpotifyUser extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function summary()
+    {
+        return $this->hasOne(SpotifySummary::class);
+    }
+
+    public function history()
+    {
+        return $this->hasMany(SongHistory::class);
+    }
 }

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\UpdateAllUsersSongsJob;
+use App\Repositories\SongHistoryRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -39,6 +41,22 @@ class HomeController extends Controller
     public function dashboard()
     {
         return view('dashboard');
+    }
+
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function history()
+    {
+        return view('history', ['history' => SongHistoryRepository::getUserLast50(Auth::user()->id)]);
+    }
+
+    public function debug()
+    {
+        UpdateAllUsersSongsJob::dispatch();
+        return 'ok';
 
         $session = new SpotifySession(
             env('SPOTIFY_ID'), 
@@ -62,7 +80,7 @@ class HomeController extends Controller
             Auth::user()->spotify->save();    
 
             $login = Auth::user()->spotify->login;
-            Log::info("Updated '{$login}' refresh token");
+            dump("Updated '{$login}' refresh token");
         }
     }
 }

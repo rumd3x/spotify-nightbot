@@ -54,9 +54,12 @@
                                     <hr>
                                     <div class="text-center">
                                         Spotify-Nightbot is a third-party service that provides automated integration between the two services. 
-                                        It was created for myself but I decided to share it with the world for free.
+                                        It was created for myself but I decided to share it with the world by open-sourcing it, making a nice UI,
+                                        hosting it on my servers and allowing anyone to use it for free.
                                         <br><br>
-                                        If you like it, you can thank me on twitch <a target="_blank" href="https://www.twitch.tv/rumd3x">@rumd3x</a>.
+                                        If you like it, you can thank me on my twitch by whatever means you wish <a target="_blank" href="https://www.twitch.tv/rumd3x">@rumd3x</a>.
+                                        <br>
+                                        Also, if you are a developer, star this project on Github! <a style="margin-top: 3px; margin-left: 3px;" class="github-button" href="https://github.com/rumd3x/spotify-nightbot" data-icon="octicon-star" data-show-count="true" aria-label="Star rumd3x/spotify-nightbot on GitHub">Star</a>
                                     </div>
                                 </div>
                             </div>
@@ -76,10 +79,11 @@
 
     <!-- Core plugin JavaScript-->
     <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+    
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
 
     <!-- Custom scripts for all pages-->
     <script src="js/sb-admin-2.min.js"></script>
-
 </body>
 
 </html>

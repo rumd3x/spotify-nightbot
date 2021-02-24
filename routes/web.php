@@ -15,20 +15,12 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', 'HomeController@index');
 Route::get('/home', 'HomeController@dashboard')->name('home');
+Route::get('/history', 'HomeController@history')->name('history');
+
+Route::get('/debug', 'HomeController@debug');
 
 Route::get('/settings/profile', 'ProfileController@index')->name('profile.settings');
 Route::post('/settings/profile', 'ProfileController@edit');
-Route::post('/settings/password', 'ProfileController@changePassword')->name('profile.password');
-
-Route::get('/settings/app', 'AppSettingsController@index')->name('app.settings');
-Route::post('/settings/app', 'AppSettingsController@save');
-
-Route::get('/timestamps/{year?}', 'TimestampController@index')->name('timestamp.months');
-Route::get('/timestamps/{year}/month/{month}', 'TimestampController@month')->name('timestamp.month');
-Route::get('/timestamps/day/{day}', 'TimestampController@day')->name('timestamp.day');
-
-Route::post('/timestamps/insert', 'TimestampRegistryController@insert')->name('timestamp.insert');
-Route::post('/timestamps/delete/{id}', 'TimestampRegistryController@delete')->name('timestamp.delete');
 
 // Authentication Routes...
 Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');

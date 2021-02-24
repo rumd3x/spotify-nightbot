@@ -5,7 +5,6 @@ namespace App\Repositories;
 use App\SpotifyUser;
 use App\User;
 use Carbon\Carbon;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
 
 final class UserRepository
@@ -39,6 +38,8 @@ final class UserRepository
             'login' => $login,
             'country' => $country
         ]);
+
+        SummaryRepository::empty($user->id);
 
         return $user;
     }
@@ -76,6 +77,16 @@ final class UserRepository
         ]);
 
         return $user;
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @return Collection
+     */
+    public static function chunkEnableds($f)
+    {
+        return User::chunk(1000, $f);
     }
 
     /**
