@@ -2,13 +2,13 @@
 
 namespace App\Repositories;
 
-use App\SpotifySummary;
+use App\PlaybackSummary;
 use App\SpotifyUser;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 
-final class SummaryRepository
+final class PlaybackSummaryRepository
 {
 
     /**
@@ -19,10 +19,8 @@ final class SummaryRepository
      */
     public static function empty(int $userId)
     {
-        $user = User::find($userId);
-
-        SpotifySummary::updateOrCreate(
-            ['spotify_user_id' => $user->spotify->id],
+        PlaybackSummary::updateOrCreate(
+            ['user_id' => $userId],
             ['song' => 'Unavailable', 'artist' => 'Unavailable', 'playback_status' => 'Unavailable']
         );
     }
@@ -31,23 +29,22 @@ final class SummaryRepository
      * Undocumented function
      *
      * @param integer $userId
-     * @return SpotifySummary
+     * @return PlaybackSummary
      */
     public static function getByUserId(int $userId)
     {
-        $user = User::find($userId);
-        return SpotifySummary::whereSpotifyUserId($user->spotify->id)->first();
+        return PlaybackSummary::whereUserId($userId)->first();
     }
 
     /**
      * Undocumented function
      *
-     * @param SpotifySummary $summary
+     * @param PlaybackSummary $summary
      * @param string $artist
      * @param string $song
      * @return bool
      */
-    public static function updateCurrentSong(SpotifySummary $summary, string $artist, string $song)
+    public static function updateCurrentSong(PlaybackSummary $summary, string $artist, string $song)
     {
         if ($summary->song === $song && $summary->artist === $artist) {
             return false;
@@ -59,11 +56,11 @@ final class SummaryRepository
     /**
      * Undocumented function
      *
-     * @param SpotifySummary $summary
+     * @param PlaybackSummary $summary
      * @param string $newPlaybackStatus
      * @return bool
      */
-    public static function updatePlaybackStatus(SpotifySummary $summary, string $newPlaybackStatus)
+    public static function updatePlaybackStatus(PlaybackSummary $summary, string $newPlaybackStatus)
     {
         return $summary->update(['playback_status' => $newPlaybackStatus]);
     }

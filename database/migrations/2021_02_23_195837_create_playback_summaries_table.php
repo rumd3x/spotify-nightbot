@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateSpotifySummariesTable extends Migration
+class CreatePlaybackSummariesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class CreateSpotifySummariesTable extends Migration
      */
     public function up()
     {
-        Schema::create('spotify_summaries', function (Blueprint $table) {
+        Schema::create('playback_summaries', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('spotify_user_id')->index();
+            $table->bigInteger('user_id')->index();
             $table->string('artist');
             $table->string('song');
             $table->string('playback_status');
@@ -31,6 +31,6 @@ class CreateSpotifySummariesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('spotify_summaries');
+        Schema::dropIfExists('playback_summaries');
     }
 }

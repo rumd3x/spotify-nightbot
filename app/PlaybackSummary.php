@@ -5,7 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class SpotifyUser extends Model
+class PlaybackSummary extends Model
 {
     use SoftDeletes;
 
@@ -16,9 +16,9 @@ class SpotifyUser extends Model
      */
     protected $fillable = [
         'user_id',
-        'login',
-        'country',
-        'profile_picture',
+        'artist',
+        'song',
+        'playback_status',
     ];
 
     public function user()

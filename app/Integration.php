@@ -5,7 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class SpotifySummary extends Model
+class Integration extends Model
 {
     use SoftDeletes;
 
@@ -15,14 +15,13 @@ class SpotifySummary extends Model
      * @var array
      */
     protected $fillable = [
-        'spotify_user_id',
-        'artist',
-        'song',
-        'playback_status',
+        'user_id',
+        'spotify_refresh_token',
+        'nightbot_refresh_token',
     ];
 
-    public function spotify()
+    public function user()
     {
-        return $this->belongsTo(SpotifyUser::class);
+        return $this->belongsTo(User::class);
     }
 }

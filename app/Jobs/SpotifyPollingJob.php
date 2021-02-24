@@ -3,7 +3,7 @@
 namespace App\Jobs;
 
 use App\Repositories\SongHistoryRepository;
-use App\Repositories\SummaryRepository;
+use App\Repositories\PlaybackSummaryRepository;
 use App\User;
 use Carbon\Carbon;
 use Carbon\CarbonTimeZone;
@@ -51,13 +51,13 @@ class SpotifyPollingJob implements ShouldQueue
         );
 
         $login = $this->user->spotify->login;
-        $session->refreshAccessToken($this->user->spotify->refresh_token);
+        $session->refreshAccessToken($this->user->integration->spotify_refresh_token);
         $accessToken = $session->getAccessToken();       
         $api = new SpotifyWebAPI();
         $api->setAccessToken($accessToken);
         $currentTrack = $api->getMyCurrentTrack();
         $refreshToken = $session->getRefreshToken();
-        $userPlaybackSummary = SummaryRepository::getByUserId($this->user->id);
+        $userPlaybackSummary = PlaybackSummaryRepository::getByUserId($this->user->id);
 
         $songUpdated = false;
         $playbackStatus = "Stopped";
@@ -66,9 +66,9 @@ class SpotifyPollingJob implements ShouldQueue
             $song = $currentTrack->item->name ?: "Unknown"; 
             $playbackStatus = $currentTrack->is_playing ? "Playing" : "Paused";
             $artist = empty($currentTrack->item->artists) ? "No Artist" : $currentTrack->item->artists[0]->name;
-            $songUpdated = SummaryRepository::updateCurrentSong($userPlaybackSummary, $artist, $song);
+            $songUpdated = PlaybackSummaryRepository::updateCurrentSong($userPlaybackSummary, $artist, $song);
         }
-        SummaryRepository::updatePlaybackStatus($userPlaybackSummary, $playbackStatus);
+        PlaybackSummaryRepository::updatePlaybackStatus($userPlaybackSummary, $playbackStatus);
         Log::info("Updated '{$login}' playback summary");
 
         if ($songUpdated) {
@@ -90,8 +90,8 @@ class SpotifyPollingJob implements ShouldQueue
             Log::info("New song on '{$login}' history");
         }       
         
-        if ($refreshToken !== $this->user->spotify->refresh_token) {
-            $this->user->spotify->refresh_token = $refreshToken;
+        if ($refreshToken !== $this->user->integration->spotify_refresh_token) {
+            $this->user->integration->spotify_refresh_token = $refreshToken;
             $this->user->spotify->save();    
             Log::info("Updated '{$login}' refresh token");
         }

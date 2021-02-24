@@ -3,7 +3,7 @@
 namespace App\Repositories;
 
 use App\Preference;
-use App\SpotifySummary;
+use App\PlaybackSummary;
 use App\User;
 
 final class PreferenceRepository

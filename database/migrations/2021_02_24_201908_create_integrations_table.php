@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateSpotifyUsersTable extends Migration
+class CreateIntegrationsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,11 @@ class CreateSpotifyUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('spotify_users', function (Blueprint $table) {
+        Schema::create('integrations', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('user_id')->index();
-            $table->string('login');
-            $table->string('country');            
-            $table->string('profile_picture')->nullable();
+            $table->string('spotify_refresh_token')->nullable();
+            $table->string('nightbot_refresh_token')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -31,6 +30,6 @@ class CreateSpotifyUsersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('spotify_users');
+        Schema::dropIfExists('integrations');
     }
 }

@@ -64,7 +64,7 @@ class HomeController extends Controller
             route('spotify.callback')
         );
         
-        $session->refreshAccessToken(Auth::user()->spotify->refresh_token);
+        $session->refreshAccessToken(Auth::user()->integration->spotify_refresh_token);
         $accessToken = $session->getAccessToken();   
        
         $api = new SpotifyWebAPI();
@@ -75,8 +75,8 @@ class HomeController extends Controller
         dump($api->getMyCurrentTrack());
 
         $refreshToken = $session->getRefreshToken();
-        if ($refreshToken !== Auth::user()->spotify->refresh_token) {
-            Auth::user()->spotify->refresh_token = $refreshToken;
+        if ($refreshToken !== Auth::user()->integration->spotify_refresh_token) {
+            Auth::user()->integration->spotify_refresh_token = $refreshToken;
             Auth::user()->spotify->save();    
 
             $login = Auth::user()->spotify->login;

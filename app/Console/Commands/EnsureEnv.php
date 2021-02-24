@@ -52,21 +52,15 @@ class EnsureEnv extends Command
             $this->setEnvironmentValue('APP_KEY', trim($key));
         }
 
-        $this->setEnvironmentValue('MAIL_DRIVER', 'smtp');
-        $this->setEnvironmentValue('MAIL_HOST', $this->getOSEnvVar('MAIL_HOST'));
-        $this->setEnvironmentValue('MAIL_PORT', $this->getOSEnvVar('MAIL_PORT'));
-        $this->setEnvironmentValue('MAIL_USERNAME', $this->getOSEnvVar('MAIL_USERNAME'));
-        $this->setEnvironmentValue('MAIL_FROM_ADDRESS', $this->getOSEnvVar('MAIL_FROM_ADDRESS'));
-        $this->setEnvironmentValue('MAIL_FROM_NAME', $this->getOSEnvVar('MAIL_FROM_NAME'));
-        $this->setEnvironmentValue('MAIL_PASSWORD', $this->getOSEnvVar('MAIL_PASSWORD'));
-        $this->setEnvironmentValue('MAIL_ENCRYPTION', $this->getOSEnvVar('MAIL_ENCRYPTION'));
-
         $this->setEnvironmentValue('DB_HOST', $this->getOSEnvVar('MYSQL_HOST'));
         $this->setEnvironmentValue('DB_USER', $this->getOSEnvVar('MYSQL_USER'));
         $this->setEnvironmentValue('DB_PASS', $this->getOSEnvVar('MYSQL_PASS'));
 
         $this->setEnvironmentValue('SPOTIFY_ID', $this->getOSEnvVar('SPOTIFY_ID'));
-        $this->setEnvironmentValue('SPOTIFY_SECRET', $this->getOSEnvVar('SPOTIFY_SECRET'));   
+        $this->setEnvironmentValue('SPOTIFY_SECRET', $this->getOSEnvVar('SPOTIFY_SECRET'));  
+        
+        $this->setEnvironmentValue('NIGHTBOT_ID', $this->getOSEnvVar('NIGHTBOT_ID'));
+        $this->setEnvironmentValue('NIGHTBOT_SECRET', $this->getOSEnvVar('NIGHTBOT_SECRET'));  
 
         $this->info('Environment ok!');
     }

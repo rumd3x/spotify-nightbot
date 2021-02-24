@@ -16,8 +16,6 @@ final class UserRepository
      * @param string $login
      * @param string $email
      * @param string $country
-     * @param string $refreshToken
-     * @param string $profilePicture
      * @return User
      */
     public static function insert(
@@ -39,8 +37,9 @@ final class UserRepository
             'country' => $country
         ]);
 
-        SummaryRepository::empty($user->id);
+        PlaybackSummaryRepository::empty($user->id);
         PreferenceRepository::empty($user->id);
+        IntegrationRepository::empty($user->id);
 
         return $user;
     }
@@ -54,7 +53,7 @@ final class UserRepository
      * @param string $email
      * @param string $country
      * @param string $profilePicture
-     * @return void
+     * @return bool
      */
     public static function update(
         int $id,
@@ -62,7 +61,6 @@ final class UserRepository
         string $login, 
         string $email, 
         string $country,
-        string $refreshToken,
         string $profilePicture
     ) {
         $user = User::find($id)->update([
@@ -73,7 +71,6 @@ final class UserRepository
         SpotifyUser::whereUserId($id)->update([
             'login' => $login,
             'country' => $country,
-            'refresh_token' => $refreshToken,
             'profile_picture' => $profilePicture,
         ]);
 

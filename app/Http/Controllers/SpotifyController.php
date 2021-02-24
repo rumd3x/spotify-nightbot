@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Repositories\IntegrationRepository;
 use App\Repositories\UserRepository;
-use App\SpotifyUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -67,9 +67,9 @@ class SpotifyController extends Controller
                 $spotifyUser->id, 
                 $spotifyUser->email, 
                 $spotifyUser->country,
-                $session->getRefreshToken(),
                 empty($spotifyUser->images) ? '' : $spotifyUser->images[0]->url
             );
+            IntegrationRepository::updateSpotifyRefreshToken($user->id, $session->getRefreshToken());
 
             Auth::login($user, true);    
             return redirect('home');

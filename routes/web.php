@@ -22,8 +22,8 @@ Route::get('/debug', 'HomeController@debug');
 Route::get('/preferences', 'PreferencesController@index')->name('preferences');
 Route::post('/preferences', 'PreferencesController@edit');
 
-Route::get('/info', 'InfoController@index')->name('info');
-Route::post('/info', 'InfoController@edit');
+Route::get('/widget', 'WidgetController@index')->name('widget');
+Route::post('/widget', 'WidgetController@edit');
 
 Route::get('/config', 'ConfigController@index')->name('config');
 Route::post('/config', 'ConfigController@edit');
