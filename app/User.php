@@ -46,6 +46,16 @@ class User extends Authenticatable
         return $this->hasOne(SpotifyUser::class);
     }
 
+    public function history()
+    {
+        return $this->hasMany(SongHistory::class);
+    }
+
+    public function preferences()
+    {
+        return $this->hasOne(Preference::class);
+    }
+
     public function getFirstNameAttribute()
     {
         return explode(' ', $this->name)[0];

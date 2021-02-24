@@ -55,8 +55,8 @@ class HomeController extends Controller
 
     public function debug()
     {
-        UpdateAllUsersSongsJob::dispatch();
-        return 'ok';
+        // UpdateAllUsersSongsJob::dispatch();
+        // return 'ok';
 
         $session = new SpotifySession(
             env('SPOTIFY_ID'), 

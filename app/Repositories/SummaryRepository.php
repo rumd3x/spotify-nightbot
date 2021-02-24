@@ -49,7 +49,7 @@ final class SummaryRepository
      */
     public static function updateCurrentSong(SpotifySummary $summary, string $artist, string $song)
     {
-        if ($summary->song === $song || $summary->artist === $artist) {
+        if ($summary->song === $song && $summary->artist === $artist) {
             return false;
         }
         

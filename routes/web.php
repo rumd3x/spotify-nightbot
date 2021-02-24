@@ -19,8 +19,15 @@ Route::get('/history', 'HomeController@history')->name('history');
 
 Route::get('/debug', 'HomeController@debug');
 
-Route::get('/settings/profile', 'ProfileController@index')->name('profile.settings');
-Route::post('/settings/profile', 'ProfileController@edit');
+Route::get('/preferences', 'PreferencesController@index')->name('preferences');
+Route::post('/preferences', 'PreferencesController@edit');
+
+Route::get('/info', 'InfoController@index')->name('info');
+Route::post('/info', 'InfoController@edit');
+
+Route::get('/config', 'ConfigController@index')->name('config');
+Route::post('/config', 'ConfigController@edit');
+
 
 // Authentication Routes...
 Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');

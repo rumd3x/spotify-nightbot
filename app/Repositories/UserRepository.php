@@ -40,6 +40,7 @@ final class UserRepository
         ]);
 
         SummaryRepository::empty($user->id);
+        PreferenceRepository::empty($user->id);
 
         return $user;
     }
