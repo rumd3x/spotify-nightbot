@@ -12,6 +12,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Log;
 use Rumd3x\NightbotAPI\NightbotAPI;
 use Rumd3x\NightbotAPI\NightbotProvider;
@@ -51,11 +52,16 @@ class NightbotSendSongMessage implements ShouldQueue
                 return;
             }
     
+            $redirectUrl = route('nightbot.callback');
+            if (App::environment('production')) {
+                $redirectUrl = str_replace('http://', 'https://', $redirectUrl);
+            }
+
             $provider = new NightbotProvider(
                 env('NIGHTBOT_ID'), 
                 env('NIGHTBOT_SECRET'), 
-                route('nightbot.callback')
-            ); 
+                $redirectUrl
+            );
     
             $accessToken = $provider->getAccessToken('refresh_token', [
                 'refresh_token' => $this->user->integration->nightbot_refresh_token,

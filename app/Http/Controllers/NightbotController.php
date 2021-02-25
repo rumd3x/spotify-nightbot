@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Repositories\IntegrationRepository;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
@@ -18,11 +19,15 @@ class NightbotController extends Controller
     }
 
     public function authenticate(Request $request) {
+        $redirectUrl = route('nightbot.callback');
+        if (App::environment('production')) {
+            $redirectUrl = str_replace('http://', 'https://', $redirectUrl);
+        }
 
         $provider = new NightbotProvider(
             env('NIGHTBOT_ID'), 
             env('NIGHTBOT_SECRET'), 
-            route('nightbot.callback')
+            $redirectUrl
         );
 
         $opts = ['scope' => [
@@ -34,11 +39,16 @@ class NightbotController extends Controller
 
     public function callbackHandler(Request $request) {
         try {
+            $redirectUrl = route('nightbot.callback');
+            if (App::environment('production')) {
+                $redirectUrl = str_replace('http://', 'https://', $redirectUrl);
+            }
+
             $provider = new NightbotProvider(
                 env('NIGHTBOT_ID'), 
                 env('NIGHTBOT_SECRET'), 
-                route('nightbot.callback')
-            );    
+                $redirectUrl
+            );   
             
             $accessToken = $provider->getAccessToken('authorization_code', [
                 'code' => $request->get('code'),
@@ -60,10 +70,15 @@ class NightbotController extends Controller
 
     public function sendTestMessage() {
         try {
+            $redirectUrl = route('nightbot.callback');
+            if (App::environment('production')) {
+                $redirectUrl = str_replace('http://', 'https://', $redirectUrl);
+            }
+
             $provider = new NightbotProvider(
                 env('NIGHTBOT_ID'), 
                 env('NIGHTBOT_SECRET'), 
-                route('nightbot.callback')
+                $redirectUrl
             );    
             
             $accessToken = $provider->getAccessToken('refresh_token', [
