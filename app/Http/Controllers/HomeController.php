@@ -59,6 +59,6 @@ class HomeController extends Controller
     {
         $notificationIds = NotificationRepository::unreadsByUserId(Auth::user()->id)->pluck('id');
         NotificationRepository::markAsRead($notificationIds->toArray());
-        return Redirect::back()->with('info', 'Notifications cleared!');
+        return back()->with('info', 'Notifications cleared!');
     }
 }

@@ -39,8 +39,8 @@ class ConfigController extends Controller
         );
 
         if (!$success){
-            return Redirect::back()->with('info', 'Failed to edit preferences.');
+            return back()->with('info', 'Failed to edit preferences.');
         }
-        return Redirect::back()->with('info', 'Preferences edited successfully.');
+        return back()->with('info', 'Preferences edited successfully.');
     }
 }

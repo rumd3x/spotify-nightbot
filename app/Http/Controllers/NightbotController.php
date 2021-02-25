@@ -18,6 +18,7 @@ class NightbotController extends Controller
     }
 
     public function authenticate(Request $request) {
+
         $provider = new NightbotProvider(
             env('NIGHTBOT_ID'), 
             env('NIGHTBOT_SECRET'), 
@@ -37,8 +38,7 @@ class NightbotController extends Controller
                 env('NIGHTBOT_ID'), 
                 env('NIGHTBOT_SECRET'), 
                 route('nightbot.callback')
-            );
-    
+            );    
             
             $accessToken = $provider->getAccessToken('authorization_code', [
                 'code' => $request->get('code'),
@@ -47,15 +47,15 @@ class NightbotController extends Controller
             IntegrationRepository::updateNightbotRefreshToken(Auth::user()->id, $accessToken->getRefreshToken());
         } catch (\Exception $e) {
             Log::error($e->getMessage());
-            return Redirect::to('config')->with('info', 'An error ocurred while trying to connect to Nightbot.');
+            return redirect()->route('config')->with('info', 'An error ocurred while trying to connect to Nightbot.');
         }
 
-        return Redirect::to('config')->with('info', 'Nightbot successfully connected.');
+        return redirect()->route('config')->with('info', 'Nightbot successfully connected.');
     }
 
     public function disconnect() {
         IntegrationRepository::updateNightbotRefreshToken(Auth::user()->id, '');
-        return Redirect::back()->with('info', 'Nightbot integration removed successfully.');
+        return back()->with('info', 'Nightbot integration removed successfully.');
     }
 
     public function sendTestMessage() {
@@ -77,10 +77,10 @@ class NightbotController extends Controller
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             IntegrationRepository::updateNightbotRefreshToken(Auth::user()->id, '');
-            return Redirect::to('config')->with('info', 'An error ocurred while trying to connect to Nightbot.');
+            return redirect()->route('config')->with('info', 'An error ocurred while trying to connect to Nightbot.');
         }
         
-        return Redirect::to('config')->with('info', 'Message sent!');
+        return redirect()->route('config')->with('info', 'Message sent!');
     }
 
 }
