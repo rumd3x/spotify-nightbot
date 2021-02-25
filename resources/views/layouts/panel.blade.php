@@ -152,7 +152,7 @@
                                 <!-- Counter - Alerts -->
                                 @if ($notifications->count() > 0)
                                     <span class="badge badge-danger badge-counter">
-                                        <i class="fas fa-exclamation-circle"></i>
+                                        {{ $notifications->count() }}
                                     </span>
                                 @endif
                             </a>
@@ -162,7 +162,7 @@
                                 <h6 class="dropdown-header">
                                     Alert Center
                                 </h6>
-                                @forelse ($notifications as $n)
+                                @foreach ($notifications as $n)
                                     <a class="dropdown-item d-flex align-items-center" href="#!">
                                         <div class="mr-3">
                                             <div class="icon-circle bg-{{ $n->type }}">
@@ -173,11 +173,14 @@
                                             <div class="small text-gray-500">{{ $n->created_at->diffForHumans() }}</div>
                                             {{ $n->message }}
                                         </div>
-                                    </a>
+                                    </a>                                    
+                                @endforeach
+
+                                @if ($notifications->count() > 0)
                                     <a class="dropdown-item text-center small text-gray-500" href="{{ route('notifications.clear') }}">Mark all as read</a>
-                                @empty
+                                @else
                                     <a class="dropdown-item text-center small text-gray-500" href="#!">No new notifications</a>
-                                @endforelse
+                                @endif
                             </div>
                         </li>
 
