@@ -72,12 +72,16 @@ class SpotifyController extends Controller
             );
             IntegrationRepository::updateSpotifyRefreshToken($user->id, $session->getRefreshToken());
 
-            Auth::login($user, true);    
-            return Redirect::back()->with('info', 'Spotify successfully connected.');
+            if (Auth::user()) {
+                return Redirect::to('config')->with('info', 'Spotify successfully connected.');
+            }
             
+            Auth::login($user);    
+            return Redirect::to('home');
+
         } catch (\Exception $e) {
             Log::error($e->getMessage());
-            return Redirect::back()->with('info', 'An error ocurred while trying to connect to Spotify.');
+            return Redirect::to('config')->with('info', 'An error ocurred while trying to connect to Spotify.');
         }
     }
 
