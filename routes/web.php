@@ -16,8 +16,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', 'HomeController@index');
 Route::get('/home', 'HomeController@dashboard')->name('home');
 Route::get('/history', 'HomeController@history')->name('history');
-
-Route::get('/debug', 'HomeController@debug');
+Route::get('/clearNotifications', 'HomeController@clearNotifications')->name('notifications.clear');
 
 Route::get('/preferences', 'PreferencesController@index')->name('preferences');
 Route::post('/preferences', 'PreferencesController@edit');

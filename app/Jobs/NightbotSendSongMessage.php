@@ -3,8 +3,10 @@
 namespace App\Jobs;
 
 use App\Repositories\IntegrationRepository;
+use App\Repositories\NotificationRepository;
 use App\Repositories\PlaybackSummaryRepository;
 use App\User;
+use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
@@ -42,36 +44,43 @@ class NightbotSendSongMessage implements ShouldQueue
      */
     public function handle()
     {
-        $login = $this->user->spotify->login;
-        if (empty($this->user->integration->nightbot_refresh_token)) {
-            Log::info("Nightbot integration disconnected on user '{$login}'");
-            return;
+        try {
+            $login = $this->user->spotify->login;
+            if (empty($this->user->integration->nightbot_refresh_token)) {
+                Log::info("Nightbot integration disconnected on user '{$login}'");
+                return;
+            }
+    
+            $provider = new NightbotProvider(
+                env('NIGHTBOT_ID'), 
+                env('NIGHTBOT_SECRET'), 
+                route('nightbot.callback')
+            ); 
+    
+            $accessToken = $provider->getAccessToken('refresh_token', [
+                'refresh_token' => $this->user->integration->nightbot_refresh_token,
+            ]);
+            
+            $summary = PlaybackSummaryRepository::getByUserId($this->user->id);
+            
+            $message = "{$summary->song} - {$summary->artist}";
+            if ($this->user->preferences->artist_song_order === "artistNamePreceding") {
+                $message = "{$summary->artist} - {$summary->song}";
+            }
+            
+            if (!empty($this->user->preferences->preceding_label)) {
+                $message = "{$this->user->preferences->preceding_label} {$message}";
+            }
+    
+            $api = new NightbotAPI($accessToken);
+            $api->sendChatMessage($message);
+            
+            IntegrationRepository::updateNightbotRefreshToken($this->user->id, $accessToken->getRefreshToken());
+        } catch (Exception $e) {
+            Log::error($e->getMessage());
+            $message = "An error ocurred when we last tried to send a chat message using Nightbot. Please go to your configurations page and try to reconnect the Nightbot integration.";
+            NotificationRepository::sendToUserId($this->user->id, $message, 'warning');
+            IntegrationRepository::updateNightbotRefreshToken($this->user->id, '');
         }
-
-        $provider = new NightbotProvider(
-            env('NIGHTBOT_ID'), 
-            env('NIGHTBOT_SECRET'), 
-            route('nightbot.callback')
-        ); 
-
-        $accessToken = $provider->getAccessToken('refresh_token', [
-            'refresh_token' => $this->user->integration->nightbot_refresh_token,
-        ]);
-        
-        $summary = PlaybackSummaryRepository::getByUserId($this->user->id);
-        
-        $message = "{$summary->song} - {$summary->artist}";
-        if ($this->user->preferences->artist_song_order === "artistNamePreceding") {
-            $message = "{$summary->artist} - {$summary->song}";
-        }
-        
-        if (!empty($this->user->preferences->preceding_label)) {
-            $message = "{$this->user->preferences->preceding_label} {$message}";
-        }
-
-        $api = new NightbotAPI($accessToken);
-        $api->sendChannelMessage($message);
-        
-        IntegrationRepository::updateNightbotRefreshToken($this->user->id, $accessToken->getRefreshToken());
     }
 }

@@ -71,6 +71,11 @@ class User extends Authenticatable
         return $this->hasOne(Configuration::class);
     }
 
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class);
+    }
+
     public function getFirstNameAttribute()
     {
         return explode(' ', $this->name)[0];

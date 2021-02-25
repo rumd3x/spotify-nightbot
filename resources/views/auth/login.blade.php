@@ -38,7 +38,7 @@
                             <div class="col-lg-12">
                                 <div class="p-5">
                                     <div class="text-center">
-                                        <img height="70" src="img/nightbot.png" alt="Nightbot">
+                                        <img height="85" src="img/logo.png" alt="Spotify-Nightbot">
                                     </div>
                                     <div class="text-center">
                                         <h1 class="h4 text-gray-900 mb-4">Let Nightbot tell your viewers the name of the song currently playing</h1>

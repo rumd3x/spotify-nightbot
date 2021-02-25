@@ -1885,21 +1885,22 @@
         },
         {
             "name": "rumd3x/nightbot-api-lib",
-            "version": "0.1.0",
+            "version": "0.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/rumd3x/nightbot-api-lib.git",
-                "reference": "3872fd8dc1a9c60f603fe6eab37e13fb77853d64"
+                "reference": "e5604eef755216250a2dca094777b855f87b94ab"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rumd3x/nightbot-api-lib/zipball/3872fd8dc1a9c60f603fe6eab37e13fb77853d64",
-                "reference": "3872fd8dc1a9c60f603fe6eab37e13fb77853d64",
+                "url": "https://api.github.com/repos/rumd3x/nightbot-api-lib/zipball/e5604eef755216250a2dca094777b855f87b94ab",
+                "reference": "e5604eef755216250a2dca094777b855f87b94ab",
                 "shasum": ""
             },
             "require": {
                 "guzzlehttp/guzzle": "^6.3",
                 "league/oauth2-client": "^2.6",
+                "nesbot/carbon": "^2.45",
                 "php": ">=7.0",
                 "tightenco/collect": "^5.8"
             },
@@ -1924,7 +1925,7 @@
             "keywords": [
                 "nightbot"
             ],
-            "time": "2021-02-24T22:10:38+00:00"
+            "time": "2021-02-25T15:29:59+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",

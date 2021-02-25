@@ -71,7 +71,7 @@ class NightbotController extends Controller
             ]);
 
             $api = new NightbotAPI($accessToken);
-            $api->sendChannelMessage('This is a test message from Spotify -> Nightbot!');        
+            $api->sendChatMessage('This is a test message from Spotify -> Nightbot!');    
             
             IntegrationRepository::updateNightbotRefreshToken(Auth::user()->id, $accessToken->getRefreshToken());
         } catch (\Exception $e) {

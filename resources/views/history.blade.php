@@ -22,7 +22,7 @@
                     <tr>
                         <td>{{ $song->artist }}</td>
                         <td>{{ $song->song }}</td>
-                        <td>{{ $song->time }}</td>
+                        <td>{{ $song->time->diffForHumans() }}</td>
                     </tr> 
                 @empty
                     <tr>

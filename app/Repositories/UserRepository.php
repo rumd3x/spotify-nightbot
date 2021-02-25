@@ -43,6 +43,12 @@ final class UserRepository
         IntegrationRepository::empty($user->id);
         ConfigRepository::empty($user->id);
 
+        NotificationRepository::sendToUserId(
+            $user->id, 
+            "Welcome to Spotify-Nightbot! Now, make sure you go to the configurations page and setup your integrations.",
+            "info"
+        );
+
         return $user;
     }
 
