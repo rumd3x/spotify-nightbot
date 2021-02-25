@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\SpotifyUser;
 use App\User;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Hash;
 
 final class UserRepository
@@ -40,6 +41,7 @@ final class UserRepository
         PlaybackSummaryRepository::empty($user->id);
         PreferenceRepository::empty($user->id);
         IntegrationRepository::empty($user->id);
+        ConfigRepository::empty($user->id);
 
         return $user;
     }
@@ -84,7 +86,11 @@ final class UserRepository
      */
     public static function chunkEnableds($f)
     {
-        return User::chunk(1000, $f);
+        return User::with(['config', 'preferences', 'spotify', 'integration'])
+        ->whereHas('config', function(Builder $query) {
+            $query->where('spotify_polling_enabled', true);
+        })
+        ->chunk(1000, $f);
     }
 
     /**

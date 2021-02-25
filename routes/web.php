@@ -28,15 +28,21 @@ Route::post('/widget', 'WidgetController@edit');
 Route::get('/config', 'ConfigController@index')->name('config');
 Route::post('/config', 'ConfigController@edit');
 
+//Spotify Integration...
+Route::get('/spotify/login', 'SpotifyController@authenticate')->name('spotify.login');
+Route::get('/spotify/callback', 'SpotifyController@callbackHandler')->name('spotify.callback');
+Route::get('/spotify/disconnect', 'SpotifyController@disconnect')->name('spotify.disconnect');
+
+//Nightbot Integration...
+Route::get('/nightbot/login', 'NightbotController@authenticate')->name('nightbot.login');
+Route::get('/nightbot/callback', 'NightbotController@callbackHandler')->name('nightbot.callback');
+Route::get('/nightbot/disconnect', 'NightbotController@disconnect')->name('nightbot.disconnect');
+Route::get('/nightbot/test', 'NightbotController@sendTestMessage')->name('nightbot.test');
 
 // Authentication Routes...
 Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
 // Route::post('login', 'Auth\LoginController@login');
 Route::post('logout', 'Auth\LoginController@logout')->name('logout');
-
-//Spotify Auth...
-Route::get('spotify_login', 'SpotifyController@authenticate')->name('spotify.login');
-Route::get('spotify_callback', 'SpotifyController@callbackHandler')->name('spotify.callback');
 
 // Registration Routes...
 // Route::get('register', 'Auth\RegisterController@showRegistrationForm')->name('register');

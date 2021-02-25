@@ -7,6 +7,7 @@ use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Redirect;
 use SpotifyWebAPI\Session as SpotifySession;
 use SpotifyWebAPI\SpotifyWebAPI;
 
@@ -14,7 +15,7 @@ class SpotifyController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('guest');
+        $this->middleware('auth')->only(['disconnect']);
     }
 
     public function authenticate(Request $request) {
@@ -72,12 +73,17 @@ class SpotifyController extends Controller
             IntegrationRepository::updateSpotifyRefreshToken($user->id, $session->getRefreshToken());
 
             Auth::login($user, true);    
-            return redirect('home');
+            return Redirect::back()->with('info', 'Spotify successfully connected.');
+            
         } catch (\Exception $e) {
             Log::error($e->getMessage());
-            return redirect('login');
+            return Redirect::back()->with('info', 'An error ocurred while trying to connect to Spotify.');
         }
     }
 
+    public function disconnect() {
+        IntegrationRepository::updateSpotifyRefreshToken(Auth::user()->id, '');
+        return Redirect::back()->with('info', 'Spotify integration removed successfully.');
+    }
 
 }

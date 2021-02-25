@@ -26,7 +26,7 @@ final class IntegrationRepository
      *
      * @param integer $userId
      * @param integer $newRefreshToken
-     * @return void
+     * @return bool
      */
     public static function updateSpotifyRefreshToken(
         int $userId,
@@ -37,6 +37,13 @@ final class IntegrationRepository
         ]);
     }
 
+    /**
+     * Undocumented function
+     *
+     * @param integer $userId
+     * @param string $newRefreshToken
+     * @return bool
+     */
     public static function updateNightbotRefreshToken(
         int $userId,
         string $newRefreshToken
@@ -44,5 +51,15 @@ final class IntegrationRepository
         return Integration::whereUserId($userId)->update([
             'nightbot_refresh_token' => $newRefreshToken,
         ]);
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param integer $userId
+     * @return Integration|null
+     */
+    public static function getFromUserId(int $userId) {
+        return Integration::whereUserId($userId)->first();
     }
 }

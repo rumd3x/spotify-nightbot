@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Repositories\IntegrationRepository;
 use App\Repositories\SongHistoryRepository;
 use App\Repositories\PlaybackSummaryRepository;
 use App\User;
@@ -44,13 +45,18 @@ class SpotifyPollingJob implements ShouldQueue
      */
     public function handle()
     {
+        $login = $this->user->spotify->login;
+        if (empty($this->user->integration->spotify_refresh_token)) {
+            Log::info("Spotify integration disconnected on user '{$login}'");
+            return;
+        }
+
         $session = new SpotifySession(
             env('SPOTIFY_ID'), 
             env('SPOTIFY_SECRET'), 
             route('spotify.callback')
         );
-
-        $login = $this->user->spotify->login;
+        
         $session->refreshAccessToken($this->user->integration->spotify_refresh_token);
         $accessToken = $session->getAccessToken();       
         $api = new SpotifyWebAPI();
@@ -72,7 +78,9 @@ class SpotifyPollingJob implements ShouldQueue
         Log::info("Updated '{$login}' playback summary");
 
         if ($songUpdated) {
-            NightbotSendSongMessage::dispatch($this->user);
+            if ($this->user->config->nightbot_alerts_enabled) {
+                NightbotSendSongMessage::dispatch($this->user);
+            }
 
             $timezoneList = CarbonTimeZone::listIdentifiers(CarbonTimeZone::PER_COUNTRY, $this->user->spotify->country);
             if (!$timezoneList) {
@@ -91,8 +99,7 @@ class SpotifyPollingJob implements ShouldQueue
         }       
         
         if ($refreshToken !== $this->user->integration->spotify_refresh_token) {
-            $this->user->integration->spotify_refresh_token = $refreshToken;
-            $this->user->spotify->save();    
+            IntegrationRepository::updateSpotifyRefreshToken($this->user->id, $refreshToken);
             Log::info("Updated '{$login}' refresh token");
         }
     }
