@@ -16,6 +16,7 @@ class CreateWidgetsTable extends Migration
         Schema::create('widgets', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('user_id')->index();
+            $table->string('code')->index();
             $table->string('background_color');
             $table->string('text_color');
             $table->string('font_family');

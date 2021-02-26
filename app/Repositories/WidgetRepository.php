@@ -19,6 +19,7 @@ final class WidgetRepository
         Widget::updateOrCreate(
             ['user_id' => $userId], 
             [
+                'code' => uniqid(rand()),
                 'font_family' => 'Arial, sans-serif', 
                 'font_size' => '24',
                 'text_color' => '#000000',
@@ -36,6 +37,17 @@ final class WidgetRepository
     public static function getByUserId(int $userId)
     {
         return Widget::whereUserId($userId)->first();
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param string $code
+     * @return Widget|null
+     */
+    public static function getByCode(string $code)
+    {
+        return Widget::whereCode($code)->first();
     }
 
     /**

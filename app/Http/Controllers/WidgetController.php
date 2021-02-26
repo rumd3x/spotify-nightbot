@@ -87,13 +87,14 @@ class WidgetController extends Controller
         return back()->with('info', 'Widget customizations edited successfully.');
     }
 
-    public function box(int $userId) {
-        $user = UserRepository::findUserByIdForWidgetBox($userId);
+    public function box(string $code) {
+        $widget = WidgetRepository::getByCode($code);
 
-        if (!$user) {
+        if (!$widget) {
             return abort(404);
         }
-
+        
+        $user = UserRepository::findUserByIdForWidgetBox($widget->user_id);
         $text = "{$user->summary->song} - {$user->summary->artist}";
         if ($user->preferences->artist_song_order === "artistNamePreceding") {
             $text = "{$user->summary->artist} - {$user->summary->song}";

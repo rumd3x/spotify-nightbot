@@ -12,12 +12,12 @@
                 <div class="form-group row mb-3">
                     <label for="txtWidgetURL" class="col-md-1 col-form-label">Widget URL</label>
                     <div class="col-md-8">
-                        <input type="text" readonly class="form-control" id="txtWidgetURL" value="{{ route('widget.box', ['id' => Auth::user()->id]) }}">
+                        <input type="text" readonly class="form-control" id="txtWidgetURL" value="{{ route('widget.box', ['id' => $widget->code]) }}">
                         <label for="txtWidgetURL"><small>Note: Widget URL contains sensitive information. It should not be shared with other users or sites.</small></label>
                     </div>
                     <div class="col-md-3">
                         <a type="button" href="#" onclick="event.preventDefault(); var copyText = document.getElementById('txtWidgetURL'); copyText.select(); copyText.setSelectionRange(0, 99999); document.execCommand('copy');" class="btn btn-secondary">Copy URL</a>
-                        <a type="button" href="#" onclick="event.preventDefault(); window.open('{{ route('widget.box', ['id' => Auth::user()->id]) }}', 'Spotify-Nightbot Widget Box', 'menubar=no,location=no,resizable=yes,scrollbars=no,status=no,width=850,height=200,top=100,left=100');" class="btn btn-secondary">Launch</a>
+                        <a type="button" href="#" onclick="event.preventDefault(); window.open('{{ route('widget.box', ['id' => $widget->code]) }}', 'Spotify-Nightbot Widget Box', 'menubar=no,location=no,resizable=yes,scrollbars=no,status=no,width=850,height=200,top=100,left=100');" class="btn btn-secondary">Launch</a>
                     </div>
                 </div>                
             </div>

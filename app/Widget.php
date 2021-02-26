@@ -16,6 +16,7 @@ class Widget extends Model
      */
     protected $fillable = [
         'user_id',
+        'code',
         'font_family',
         'font_size',
         'text_color',
