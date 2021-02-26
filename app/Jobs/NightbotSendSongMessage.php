@@ -7,6 +7,7 @@ use App\Repositories\NotificationRepository;
 use App\Repositories\PlaybackSummaryRepository;
 use App\User;
 use Exception;
+use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
@@ -14,6 +15,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Log;
+use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 use Rumd3x\NightbotAPI\NightbotAPI;
 use Rumd3x\NightbotAPI\NightbotProvider;
 
@@ -83,10 +85,21 @@ class NightbotSendSongMessage implements ShouldQueue
             
             IntegrationRepository::updateNightbotRefreshToken($this->user->id, $accessToken->getRefreshToken());
         } catch (Exception $e) {
-            Log::error($e->getMessage());
-            $message = "An error ocurred when we last tried to send a chat message using Nightbot. Please go to your configurations page and try to reconnect the Nightbot integration.";
-            NotificationRepository::sendToUserId($this->user->id, $message, 'warning');
-            IntegrationRepository::updateNightbotRefreshToken($this->user->id, '');
+
+            if ($e instanceof IdentityProviderException) {
+                Log::error($e->getMessage());
+                $message = "An error ocurred when we last tried to send a chat message using Nightbot. Please go to your configurations page and try to reconnect the Nightbot integration.";
+                NotificationRepository::sendToUserId($this->user->id, $message, 'warning');
+                IntegrationRepository::updateNightbotRefreshToken($this->user->id, '');
+                return;
+            }
+
+            if ($e instanceof GuzzleException) {
+                Log::error($e->getMessage());
+                return;
+            }
+
+            throw $e;
         }
     }
 }

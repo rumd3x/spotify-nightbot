@@ -18,6 +18,8 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Support\Facades\Log;
 use SpotifyWebAPI\Session as SpotifySession;
 use SpotifyWebAPI\SpotifyWebAPI;
+use SpotifyWebAPI\SpotifyWebAPIAuthException;
+use SpotifyWebAPI\SpotifyWebAPIException;
 
 class SpotifyPollingJob implements ShouldQueue
 {
@@ -106,10 +108,20 @@ class SpotifyPollingJob implements ShouldQueue
                 Log::info("Updated '{$login}' refresh token");
             }
         } catch (Exception $e) {
-            Log::error($e->getMessage());
-            $message = "An error ocurred when we last tried to update your playback summary from Spotify. Please go to your configurations page and try to reconnect the Spotify integration.";
-            NotificationRepository::sendToUserId($this->user->id, $message, 'warning');
-            IntegrationRepository::updateSpotifyRefreshToken($this->user->id, '');
+            if ($e instanceof SpotifyWebAPIAuthException) {
+                Log::error($e->getMessage());
+                $message = "An error ocurred when we last tried to update your playback summary from Spotify. Please go to your configurations page and try to reconnect the Spotify integration.";
+                NotificationRepository::sendToUserId($this->user->id, $message, 'warning');
+                IntegrationRepository::updateSpotifyRefreshToken($this->user->id, '');
+                return;
+            }
+
+            if ($e instanceof SpotifyWebAPIException) {
+                Log::error($e->getMessage());
+                return;
+            }
+
+            throw $e;
         }
     }
 }
