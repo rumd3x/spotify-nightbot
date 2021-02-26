@@ -23,6 +23,7 @@ Route::post('/preferences', 'PreferencesController@edit');
 
 Route::get('/widget', 'WidgetController@index')->name('widget');
 Route::post('/widget', 'WidgetController@edit');
+Route::get('/widget/{id}', 'WidgetController@box')->name('widget.box');
 
 Route::get('/config', 'ConfigController@index')->name('config');
 Route::post('/config', 'ConfigController@edit');

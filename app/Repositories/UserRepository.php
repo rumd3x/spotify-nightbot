@@ -42,6 +42,7 @@ final class UserRepository
         PreferenceRepository::empty($user->id);
         IntegrationRepository::empty($user->id);
         ConfigRepository::empty($user->id);
+        WidgetRepository::empty($user->id);
 
         NotificationRepository::sendToUserId(
             $user->id, 
@@ -50,6 +51,17 @@ final class UserRepository
         );
 
         return $user;
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param integer $userId
+     * @return User|null
+     */
+    public static function findUserByIdForWidgetBox(int $userId)
+    {
+        return User::with(['summary', 'preferences', 'widget'])->find($userId);
     }
 
     /**
