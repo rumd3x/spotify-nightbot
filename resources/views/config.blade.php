@@ -17,8 +17,8 @@
                     </div>
 
                     <div class="form-check mb-3">
-                        <input type="checkbox" class="form-check-input" id="ckbEnableSpotifyPolling" name="nightbotAlertsEnabled" value="1" {{ $config->nightbot_alerts_enabled ? 'checked' : '' }}>
-                        <label class="form-check-label" for="ckbEnableSpotifyPolling">Send Nightbot alerts whenever my playback information is updated</label>
+                        <input type="checkbox" class="form-check-input" id="ckbEnableNightbotAlerts" name="nightbotAlertsEnabled" value="1" {{ $config->nightbot_alerts_enabled ? 'checked' : '' }}>
+                        <label class="form-check-label" for="ckbEnableNightbotAlerts">Send Nightbot alerts whenever my playback information is updated</label>
                     </div>
 
                     @csrf
@@ -53,6 +53,8 @@
                         @endif                        
                     </div>
                 </div>
+
+                <hr />
 
                 <div class="row mb-3">
                     <div class="col-md-1">
