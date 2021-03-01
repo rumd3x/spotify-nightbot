@@ -2,7 +2,7 @@
 
 namespace App\Console;
 
-use App\Jobs\ArtisanCommandJob;
+use App\Jobs\SpotifyRenewRefreshTokens;
 use App\Jobs\UpdateAllUsersSongsJob;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
@@ -27,6 +27,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->job(new UpdateAllUsersSongsJob)->everyMinute();
+        $schedule->job(new SpotifyRenewRefreshTokens)->daily();
     }
 
     /**

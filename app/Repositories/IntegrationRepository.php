@@ -62,4 +62,14 @@ final class IntegrationRepository
     public static function getFromUserId(int $userId) {
         return Integration::whereUserId($userId)->first();
     }
+
+    /**
+     * Undocumented function
+     *
+     * @return Collection
+     */
+    public static function getIntegrationsWithSpotify()
+    {
+        return Integration::where('spotify_refresh_token', '<>', '')->get();
+    }
 }

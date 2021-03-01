@@ -67,7 +67,6 @@ class SpotifyPollingJob implements ShouldQueue
             $api = new SpotifyWebAPI();
             $api->setAccessToken($accessToken);
             $currentTrack = $api->getMyCurrentTrack();
-            $refreshToken = $session->getRefreshToken();
             $userPlaybackSummary = PlaybackSummaryRepository::getByUserId($this->user->id);
     
             $songUpdated = false;
@@ -101,23 +100,16 @@ class SpotifyPollingJob implements ShouldQueue
                 $time = Carbon::now($timezoneList[0]);
                 SongHistoryRepository::add($this->user->id, $artists, $song, $time);
                 Log::info("New song on '{$login}' history");
-            }       
-            
-            if ($refreshToken !== $this->user->integration->spotify_refresh_token) {
-                IntegrationRepository::updateSpotifyRefreshToken($this->user->id, $refreshToken);
-                Log::info("Updated '{$login}' refresh token");
             }
+            
         } catch (Exception $e) {
             if ($e instanceof SpotifyWebAPIAuthException) {
-                Log::error($e->getMessage());
-                $message = "An error ocurred when we last tried to update your playback summary from Spotify. Please go to your configurations page and try to reconnect the Spotify integration.";
-                NotificationRepository::sendToUserId($this->user->id, $message, 'warning');
-                IntegrationRepository::updateSpotifyRefreshToken($this->user->id, '');
+                Log::error("[SpotifyPollingJob] Auth Error [{$e->getCode()}] for user '{$login}': '{$e->getMessage()}' Reason: '{$e->getReason()}'");
                 return;
             }
 
             if ($e instanceof SpotifyWebAPIException) {
-                Log::error($e->getMessage());
+                Log::error("[SpotifyPollingJob] API Error [{$e->getCode()}] for user '{$login}': '{$e->getMessage()}' Reason: '{$e->getReason()}'");
                 return;
             }
 
