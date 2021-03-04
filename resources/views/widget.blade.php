@@ -12,12 +12,12 @@
                 <div class="form-group row mb-3">
                     <label for="txtWidgetURL" class="col-md-1 col-form-label">Widget URL</label>
                     <div class="col-md-8">
-                        <input type="text" readonly class="form-control" id="txtWidgetURL" value="{{ route('widget.box', ['id' => $widget->code]) }}">
+                        <input type="text" readonly class="form-control" id="txtWidgetURL" value="{{ route('widget.box', ['code' => $widget->code]) }}">
                         <label for="txtWidgetURL"><small>Note: Widget URL contains sensitive information. It should not be shared with other users or sites.</small></label>
                     </div>
                     <div class="col-md-3">
                         <a type="button" href="#" onclick="event.preventDefault(); var copyText = document.getElementById('txtWidgetURL'); copyText.select(); copyText.setSelectionRange(0, 99999); document.execCommand('copy');" class="btn btn-secondary">Copy URL</a>
-                        <a type="button" href="#" onclick="event.preventDefault(); window.open('{{ route('widget.box', ['id' => $widget->code]) }}', 'Spotify-Nightbot Widget Box', 'menubar=no,location=no,resizable=yes,scrollbars=no,status=no,width=850,height=200,top=100,left=100');" class="btn btn-secondary">Launch</a>
+                        <a type="button" href="#" onclick="event.preventDefault(); window.open('{{ route('widget.box', ['code' => $widget->code]) }}', 'Spotify-Nightbot Widget Box', 'menubar=no,location=no,resizable=yes,scrollbars=no,status=no,width=850,height=200,top=100,left=100');" class="btn btn-secondary">Launch</a>
                     </div>
                 </div>                
             </div>
@@ -34,17 +34,17 @@
             <div class="col-md-12">
                 <form action="{{ route('widget') }}" method="POST">
                     <div class="form-group row mb-3">
-                        <label for="txtColor" class="col-md-1 col-form-label">Background Color</label>
+                        <label for="txtBackgroundColor" class="col-md-1 col-form-label">Background Color</label>
                         <div class="col-md-10">
-                            <input type="color" class="form-control" id="txtColor" name="backgroundColor" value="{{ $widget->background_color }}">
-                            <label for="txtColor"><small>Note: This background color is for preview purposes only. It will not be shown in your streaming software.</small></label>
+                            <input type="color" class="form-control" id="txtBackgroundColor" name="backgroundColor" value="{{ $widget->background_color }}">
+                            <label for="txtBackgroundColor"><small>Note: This background color is for preview purposes only. It will not be shown in your streaming software.</small></label>
                         </div>
                     </div> 
 
                     <div class="form-group row mb-3">
-                        <label for="txtColor" class="col-md-1 col-form-label">Text Color</label>
+                        <label for="txtTextColor" class="col-md-1 col-form-label">Text Color</label>
                         <div class="col-md-10">
-                            <input type="color" class="form-control" id="txtColor" name="textColor" value="{{ $widget->text_color }}">
+                            <input type="color" class="form-control" id="txtTextColor" name="textColor" value="{{ $widget->text_color }}">
                         </div>
                     </div>  
 
@@ -60,15 +60,37 @@
                     </div>
 
                     <div class="form-group row mb-3">
-                        <label for="txtWidgetURL" class="col-md-1 col-form-label">Font Size</label>
+                        <label for="cmbFontSize" class="col-md-1 col-form-label">Font Size</label>
                         <div class="col-md-10">
-                            <select type="color" class="form-control" id="txtColor" name="fontSize">
+                            <select type="color" class="form-control" id="cmbFontSize" name="fontSize">
                             @foreach ($sizes as $size)
                                 <option value="{{ $size }}" {{ $size == $widget->font_size ? 'selected' : '' }}>{{ $size }}px</option>
                             @endforeach
                             </select>
                         </div>
-                    </div>                  
+                    </div> 
+
+                    <div class="form-group row mb-3">
+                        <label for="cmbInTransition" class="col-md-1 col-form-label">In Animation:</label>
+                        <div class="col-md-10">
+                            <select type="color" class="form-control" id="cmbInTransition" name="inTransition">
+                            @foreach ($inTransitions as $animation)
+                                <option value="{{ $animation }}" {{ $animation == $widget->transition_in ? 'selected' : '' }}>{{ $animation }}</option>
+                            @endforeach
+                            </select>
+                        </div>
+                    </div> 
+
+                    <div class="form-group row mb-3">
+                        <label for="cmbOutTransition" class="col-md-1 col-form-label">Out Animation:</label>
+                        <div class="col-md-10">
+                            <select type="color" class="form-control" id="cmbOutTransition" name="outTransition">
+                            @foreach ($outTransitions as $animation)
+                                <option value="{{ $animation }}" {{ $animation == $widget->transition_out ? 'selected' : '' }}>{{ $animation }}</option>
+                            @endforeach
+                            </select>
+                        </div>
+                    </div>                 
 
                     @csrf
                     <div class="mb-3">

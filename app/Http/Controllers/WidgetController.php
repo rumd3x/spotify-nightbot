@@ -52,12 +52,16 @@ class WidgetController extends Controller
             ['value' => "Brushstroke, fantasy", 'name' => "Brushstroke"],
         ];
 
+        $inTransitions = ['none', 'backInDown','backInLeft','backInRight','backInUp','bounceIn','bounceInDown','bounceInLeft','bounceInRight','bounceInUp','fadeIn','fadeInDown','fadeInDownBig','fadeInLeft','fadeInLeftBig','fadeInRight','fadeInRightBig','fadeInUp','fadeInUpBig','fadeInTopLeft','fadeInTopRight','fadeInBottomLeft','fadeInBottomRight','flipInX','flipInY','lightSpeedInRight','lightSpeedInLeft','rotateIn','rotateInDownLeft','rotateInDownRight','rotateInUpLeft','rotateInUpRight','zoomIn','zoomInDown','zoomInLeft','zoomInRight','zoomInUp','slideInDown','slideInLeft','slideInRight','slideInUp','jackInTheBox','rollIn','hinge'];
+        $outTransitions = ['none', 'backOutDown','backOutLeft','backOutRight','backOutUp','bounceOut','bounceOutDown','bounceOutLeft','bounceOutRight','bounceOutUp','fadeOut','fadeOutDown','fadeOutDownBig','fadeOutLeft','fadeOutLeftBig','fadeOutRight','fadeOutRightBig','fadeOutUp','fadeOutUpBig','fadeOutTopLeft','fadeOutTopRight','fadeOutBottomRight','fadeOutBottomLeft','flipOutX','flipOutY','lightSpeedOutRight','lightSpeedOutLeft','rotateOut','rotateOutDownLeft','rotateOutDownRight','rotateOutUpLeft','rotateOutUpRight','slideOutDown','slideOutLeft','slideOutRight','slideOutUp','zoomOut','zoomOutDown','zoomOutLeft','zoomOutRight','zoomOutUp','jackInTheBox','rollOut','hinge'];
         $sizes = [12,14,16,20,24,28,32,36,48,72];
 
         return view('widget', [
             'widget' => WidgetRepository::getByUserId(Auth::user()->id),
             'fonts' => $fonts,
             'sizes' => $sizes,
+            'inTransitions' => $inTransitions,
+            'outTransitions' => $outTransitions,
         ]);
     }
 
@@ -68,6 +72,8 @@ class WidgetController extends Controller
             'textColor' => ['required', 'regex:/^(#(?:[0-9a-f]{2}){2,4}|#[0-9a-f]{3}|(?:rgba?|hsla?)\((?:\d+%?(?:deg|rad|grad|turn)?(?:,|\s)+){2,3}[\s\/]*[\d\.]+%?\))$/i'],
             'fontFamily' => 'required|string',
             'fontSize' => 'required|int|min:5|max:100',
+            'inTransition' => 'required|string',
+            'outTransition' => 'required|string',
         ]);
 
         $success = WidgetRepository::edit(
@@ -75,7 +81,9 @@ class WidgetController extends Controller
             $request->input('backgroundColor') ?: '',
             $request->input('textColor'),
             $request->input('fontFamily'),
-            $request->input('fontSize')
+            $request->input('fontSize'),
+            $request->input('inTransition'),
+            $request->input('outTransition')
         );
 
         $success = true;
@@ -93,16 +101,8 @@ class WidgetController extends Controller
         if (!$widget) {
             return abort(404);
         }
-        
+
         $user = UserRepository::findUserByIdForWidgetBox($widget->user_id);
-        $text = "{$user->summary->song} - {$user->summary->artist}";
-        if ($user->preferences->artist_song_order === "artistNamePreceding") {
-            $text = "{$user->summary->artist} - {$user->summary->song}";
-        }
-        
-        if (!empty($user->preferences->preceding_label)) {
-            $text = "{$user->preferences->preceding_label} {$text}";
-        }
 
         $fontPieces = explode(',', $user->widget->font_family);
         foreach ($fontPieces as $k => $fontPart) {
@@ -111,6 +111,31 @@ class WidgetController extends Controller
         }
         $font = implode(', ', $fontPieces);
 
-        return view('widget.box', ['font' => $font, 'text' => $text, 'widget' => $user->widget]);
+        return view('widget.box', ['font' => $font, 'widget' => $user->widget]);
+    }
+
+    public function raw(string $code)
+    {
+        $widget = WidgetRepository::getByCode($code);
+
+        if (!$widget) {
+            return abort(404);
+        }
+
+        $user = UserRepository::findUserByIdForWidgetBox($widget->user_id);
+        if ($user->summary->playback_status !== "Playing") {
+            return "";
+        }
+
+        $text = "{$user->summary->song} - {$user->summary->artist}";
+        if ($user->preferences->artist_song_order === "artistNamePreceding") {
+            $text = "{$user->summary->artist} - {$user->summary->song}";
+        }
+        
+        if (!empty($user->preferences->preceding_label)) {
+            $text = "{$user->preferences->preceding_label} {$text}";
+        }      
+
+        return $text;
     }
 }

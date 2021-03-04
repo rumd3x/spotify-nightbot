@@ -21,6 +21,8 @@ class Widget extends Model
         'font_size',
         'text_color',
         'background_color',
+        'transition_in',
+        'transition_out',
     ];
 
     public function user()

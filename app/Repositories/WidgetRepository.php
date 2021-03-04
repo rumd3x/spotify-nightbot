@@ -24,6 +24,8 @@ final class WidgetRepository
                 'font_size' => '24',
                 'text_color' => '#000000',
                 'background_color' => '#00ff00',
+                'transition_in' => 'none',
+                'transition_out' => 'none',
             ]
         );
     }
@@ -65,13 +67,17 @@ final class WidgetRepository
         string $backgroundColor,
         string $textColor,
         string $fontFamily,
-        string $fontSize
+        string $fontSize,
+        string $transitionIn,
+        string $transitionOut
     ) {
         return Widget::whereUserId($userId)->update([
             'font_family' => $fontFamily, 
             'font_size' => $fontSize,
             'text_color' => $textColor,
             'background_color' => $backgroundColor,
+            'transition_in' => $transitionIn,
+            'transition_out' => $transitionOut,
         ]);
     }
 }
