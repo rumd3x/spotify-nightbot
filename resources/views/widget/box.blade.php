@@ -28,7 +28,7 @@
     </script>
     <script type="text/javascript">
         const fetchCurrentlyPlaying = () => {
-            $.get('{{ route('widget.raw', ['code' => $widget->code]) }}').then(function(text) {
+            $.get(window.location.href + '/raw').then(function(text) {
                 setTimeout(function(){
                     fetchCurrentlyPlaying();
                 }, 10000);
