@@ -19,7 +19,7 @@ class WidgetController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth')->except(['box']);
+        $this->middleware('auth')->except(['box', 'raw']);
     }
 
     public function index()
