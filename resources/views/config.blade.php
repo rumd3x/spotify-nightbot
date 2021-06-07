@@ -21,6 +21,11 @@
                         <label class="form-check-label" for="ckbEnableNightbotAlerts">Send Nightbot alerts whenever my playback information is updated</label>
                     </div>
 
+                    <div class="form-check mb-3">
+                        <input type="checkbox" class="form-check-input" id="ckbEnableNightbotCommand" name="nightbotCommandEnabled" value="1" {{ $config->nightbot_command_enabled ? 'checked' : '' }}>
+                        <label class="form-check-label" for="ckbEnableNightbotCommand">Make available a <strong>!song</strong> command for your viewers</label>
+                    </div>
+
                     @csrf
                     <div class=" mb-3">
                         <button type="submit" class="btn btn-primary">Save</button>

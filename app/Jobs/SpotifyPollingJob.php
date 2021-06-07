@@ -73,18 +73,29 @@ class SpotifyPollingJob implements ShouldQueue
             $playbackStatus = "Stopped";
     
             if (!empty($currentTrack)) {
-                $song = $currentTrack->item->name ?: "Unknown"; 
                 $playbackStatus = $currentTrack->is_playing ? "Playing" : "Paused";
-                $artist = empty($currentTrack->item->artists) ? "No Artist" : $currentTrack->item->artists[0]->name;
+
+                $song = "Unknown";
+                $artist = "No Artist";
+                if (!empty($currentTrack->item)) {
+                    $song = $currentTrack->item->name ?: "Unknown"; 
+                    $artist = empty($currentTrack->item->artists) ? "No Artist" : $currentTrack->item->artists[0]->name;
+                }    
+
                 $songUpdated = PlaybackSummaryRepository::updateCurrentSong($userPlaybackSummary, $artist, $song);
             }
-            PlaybackSummaryRepository::updatePlaybackStatus($userPlaybackSummary, $playbackStatus);
+
+            $playbackStatusUpdated = PlaybackSummaryRepository::updatePlaybackStatus($userPlaybackSummary, $playbackStatus);
             Log::info("Updated '{$login}' playback summary");
+
+            if (($playbackStatusUpdated || $songUpdated) && $this->user->config->nightbot_command_enabled) {
+                NightbotUpdateCommand::dispatch($this->user);
+            }
     
             if ($songUpdated) {
                 if ($this->user->config->nightbot_alerts_enabled) {
                     NightbotSendSongMessage::dispatch($this->user);
-                }
+                }                
     
                 $timezoneList = CarbonTimeZone::listIdentifiers(CarbonTimeZone::PER_COUNTRY, $this->user->spotify->country);
                 if (!$timezoneList) {

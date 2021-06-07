@@ -30,12 +30,14 @@ class ConfigController extends Controller
         $request->validate([
             'spotifyPollingEnabled' => 'boolean',
             'nightbotAlertsEnabled' => 'boolean',
+            'nightbotCommandEnabled' => 'boolean',
         ]);
 
         $success = ConfigRepository::edit(
             Auth::user()->id,
             $request->input('spotifyPollingEnabled') ?: false,
-            $request->input('nightbotAlertsEnabled') ?: false
+            $request->input('nightbotAlertsEnabled') ?: false,
+            $request->input('nightbotCommandEnabled') ?: false
         );
 
         if (!$success){

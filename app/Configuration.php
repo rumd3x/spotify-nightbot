@@ -18,6 +18,7 @@ class Configuration extends Model
         'user_id',
         'spotify_polling_enabled',
         'nightbot_alerts_enabled',
+        'nightbot_command_enabled',
     ];
 
     /**
@@ -28,6 +29,7 @@ class Configuration extends Model
     protected $casts = [
         'spotify_polling_enabled' => 'boolean',
         'nightbot_alerts_enabled' => 'boolean',
+        'nightbot_command_enabled' => 'boolean',
     ];
 
     public function user()

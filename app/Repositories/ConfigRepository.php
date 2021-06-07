@@ -17,7 +17,7 @@ final class ConfigRepository
     {
         return Configuration::updateOrCreate(
             ['user_id' => $userId],
-            ['spotify_polling_enabled' => true, 'nightbot_alerts_enabled' => true]
+            ['spotify_polling_enabled' => true, 'nightbot_alerts_enabled' => true, 'nightbot_command_enabled' => false]
         );
     }
 
@@ -40,16 +40,19 @@ final class ConfigRepository
      * @param integer $userId
      * @param boolean $spotifyPolling
      * @param boolean $nightbotAlerts
+     * @param boolean $nightbotCommand
      * @return bool
      */
     public static function edit(
         int $userId,
         bool $spotifyPolling,
-        bool $nightbotAlerts
+        bool $nightbotAlerts,
+        bool $nightbotCommand
     ) {
         return Configuration::whereUserId($userId)->update([
             'spotify_polling_enabled' => $spotifyPolling, 
             'nightbot_alerts_enabled' => $nightbotAlerts,
+            'nightbot_command_enabled' => $nightbotCommand,
         ]);
     }
 }
