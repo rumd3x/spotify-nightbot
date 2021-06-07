@@ -32,6 +32,7 @@ class NightbotController extends Controller
 
         $opts = ['scope' => [
             'channel_send',
+            'commands'
         ]];
 
         return redirect($provider->getAuthorizationUrl($opts));

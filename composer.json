@@ -13,7 +13,7 @@
         "jwilsson/spotify-web-api-php": "^4.2",
         "laravel/framework": "5.8.*",
         "laravel/tinker": "^1.0",
-        "rumd3x/nightbot-api-lib": "^0.1.0"
+        "rumd3x/nightbot-api-lib": "^0.2.0"
     },
     "require-dev": {
         "beyondcode/laravel-dump-server": "^1.0",
