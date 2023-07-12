@@ -6,8 +6,14 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
+    
+    <meta name="title" content="Spotify -> Nightbot">
+    <meta name="description" content="Spotify-Nightbot is a third-party service that provides automated integration between the two services. It was created for myself but I decided to share it with the world by open-sourcing it, making a nice UI, hosting it on my servers and allowing anyone to use it for free.">
+    <meta name="keywords" content="spotify, nightbot, twitch, youtube, integration, robot, automation, chat, message, free, command, message">
+    <meta name="robots" content="index, follow">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="language" content="English">
+    <meta name="author" content="https://github.com/rumd3x">
 
     <title>Spotify -> Nightbot</title>
 
