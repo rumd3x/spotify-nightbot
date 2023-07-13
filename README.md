@@ -7,13 +7,11 @@
 
 </p>
 
-![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/edmur/spotify-nightbot.svg)
-![Docker Cloud Automated build](https://img.shields.io/docker/cloud/automated/edmur/spotify-nightbot.svg)
 ![License](https://img.shields.io/github/license/rumd3x/spotify-nightbot.svg)
 
 # About
 
-This is the repository for the [Spotify-Nightbot](https://spotify-nightbot.edmurcardoso.com.br) project. It uses `PHP 7.3`, `Laravel 5.8` and `Docker`.
+This is the repository for the [Spotify-Nightbot](https://spotify-nightbot.rumd3x.com) project. It uses `PHP 7.3`, `Laravel 5.8` and `Docker`.
 <br><br>
 It aims to provide a nice integration between Spotify and Nightbot, in order to provide automated real-time in-chat alerts for your songs, some cool widgets to add to your livestream overlay, and on top of all a nice web UI to manage it all.
 <br><br>
